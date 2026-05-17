@@ -14,6 +14,8 @@ FLClash script overrides:
 
 The configs do not embed airport subscription URLs. They reference server subscriptions already imported in Shadowrocket by name, then apply split-routing groups for AI, streaming, Telegram, Netflix, TikTok, Apple, Microsoft, domestic traffic, and final fallback.
 
+Domestic mini-app and media traffic is placed before proxy rules and forced to `DIRECT`, including WeChat/Tencent, Alipay, Douyin, Bilibili, iQIYI, Youku, Tencent Video, NetEase Music, and common related CDN domains.
+
 ## Use In Shadowrocket
 
 1. In Shadowrocket, import your airport server subscription first.
