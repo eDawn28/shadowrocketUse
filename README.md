@@ -10,6 +10,7 @@ Shadowrocket configs:
 
 - `ios-mesl-shadowrocket.conf`
 - `ios-oixcloud-shadowrocket.conf`
+- `ios-app-splash-ad-shadowrocket.module`
 
 FLClash script overrides:
 
@@ -28,6 +29,19 @@ iOS Shadowrocket 配置采用保守广告拦截策略：在局域网直连规则
 
 如果某个 App 仍有开屏广告，可以先在 Shadowrocket 日志中确认广告请求域名，再按需追加更精确的 `DOMAIN` 或 `DOMAIN-SUFFIX` 规则。
 
+## 开屏广告增强模块
+
+`ios-app-splash-ad-shadowrocket.module` 是可选增强模块，参考公开 Shadowrocket 去开屏广告规则的常见做法，加入了部分 `URL Rewrite` 和常见广告 SDK 域名拦截，用来处理 Bilibili、知乎、高德、京东、阿里系、网易云音乐等 App 的开屏广告接口。
+
+这个模块不是主配置的一部分，需要在 Shadowrocket 的模块页面单独添加并启用：
+
+- Raw：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-app-splash-ad-shadowrocket.module`
+- jsDelivr：`https://cdn.jsdelivr.net/gh/eDawn28/shadowrocketUse@main/ios-app-splash-ad-shadowrocket.module`
+
+注意：URL Rewrite 处理 HTTPS 请求时通常需要开启 HTTPS 解密，并在 iOS 中安装、信任 Shadowrocket 证书。部分 App 使用证书固定，开启解密后可能失效、报错或无法联网；如果出现异常，优先关闭这个模块。
+
+模块内已放置微信、支付宝、银联支付相关白名单，并且没有对微信、支付宝、小程序支付相关域名开启 MITM。不要自行添加 `qq.com`、`tencent.com`、`alipay.com`、`alicdn.com` 这类过宽的拦截规则，否则容易影响小程序、登录或支付。
+
 ## Use In Shadowrocket
 
 1. In Shadowrocket, import your airport server subscription first.
@@ -44,6 +58,10 @@ Suggested usage:
 If `MESL Nodes` or `oixCloud Nodes` shows `None`, the server subscription name does not match, the server subscription was imported as a local config instead of a server subscription, or the server subscription has not updated successfully.
 
 Do not merge these two configs inside Shadowrocket unless you specifically want to debug node/provider behavior.
+
+## 分组选择保留
+
+Shadowrocket 的分组配置不再写入 `select=0`，避免每次更新远端 `.conf` 时强制恢复到第一个选项。只要分组名称和候选项保持稳定，小火箭通常会尽量沿用本地已有选择；如果机场节点被删除或订阅异常导致选项丢失，再手动重新选择节点或兜底策略即可。
 
 ## Use In FLClash
 
