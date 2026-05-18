@@ -1,5 +1,9 @@
 # ClashCloud routing configs
 
+GitHub 仓库：
+
+- https://github.com/eDawn28/shadowrocketUse
+
 This repository stores Shadowrocket rule configs and FLClash script overrides.
 
 Shadowrocket configs:
@@ -15,6 +19,14 @@ FLClash script overrides:
 The configs do not embed airport subscription URLs. They reference server subscriptions already imported in Shadowrocket by name, then apply split-routing groups for AI, streaming, Telegram, Netflix, TikTok, Apple, Microsoft, domestic traffic, and final fallback.
 
 Domestic mini-app and media traffic is placed before proxy rules and forced to `DIRECT`, including WeChat/Tencent, Alipay, Douyin, Bilibili, iQIYI, Youku, Tencent Video, NetEase Music, and common related CDN domains.
+
+## 广告拦截说明
+
+iOS Shadowrocket 配置采用保守广告拦截策略：在局域网直连规则之后、国内 App 直连规则之前放置 `Advertising.list` 并走 `REJECT`。
+
+这样可以优先拦截已知广告域名，提升 App 开屏广告的域名级屏蔽命中率，同时不添加宽泛关键词规则，降低误伤登录、支付、图片、视频和统计接口的风险。
+
+如果某个 App 仍有开屏广告，可以先在 Shadowrocket 日志中确认广告请求域名，再按需追加更精确的 `DOMAIN` 或 `DOMAIN-SUFFIX` 规则。
 
 ## Use In Shadowrocket
 
