@@ -1,0 +1,87 @@
+#!name=ClashCloud 开屏广告增强
+#!desc=可选模块：参考公开 Shadowrocket 开屏广告规则，优先处理常见国内 App 开屏广告。HTTPS 规则需要在 Shadowrocket 中安装并信任证书，遇到 App 异常时请先关闭本模块。
+#!category=Rules
+
+[Rule]
+# 微信、支付宝、银联支付白名单。不要使用过宽的 qq.com / tencent.com / alicdn.com 白名单，否则会绕过广告 SDK 规则。
+DOMAIN-SUFFIX,wechatpay.cn,DIRECT
+DOMAIN-SUFFIX,tenpay.com,DIRECT
+DOMAIN-SUFFIX,pay.weixin.qq.com,DIRECT
+DOMAIN-SUFFIX,servicewechat.com,DIRECT
+DOMAIN-SUFFIX,weixin.qq.com,DIRECT
+DOMAIN-SUFFIX,wx.qq.com,DIRECT
+DOMAIN-SUFFIX,alipay.com,DIRECT
+DOMAIN-SUFFIX,alipayobjects.com,DIRECT
+DOMAIN-SUFFIX,alipaydns.com,DIRECT
+DOMAIN-SUFFIX,antfin.com,DIRECT
+DOMAIN-SUFFIX,antgroup.com,DIRECT
+DOMAIN-SUFFIX,unionpay.com,DIRECT
+DOMAIN-SUFFIX,95516.com,DIRECT
+
+# 常见广告 SDK 与开屏素材域名，规则较主配置更激进，因此单独做成可选模块。
+DOMAIN-SUFFIX,adashbc.ut.taobao.com,REJECT-200
+DOMAIN-SUFFIX,adashx.m.taobao.com,REJECT-200
+DOMAIN-SUFFIX,adashx.ut.dingtalk.com,REJECT-200
+DOMAIN-SUFFIX,adashxgc.ut.taobao.com,REJECT-200
+DOMAIN-SUFFIX,amdc.m.taobao.com,REJECT-200
+DOMAIN-SUFFIX,boot.biz.weibo.com,REJECT-200
+DOMAIN-SUFFIX,bootpreload.uve.weibo.com,REJECT-200
+DOMAIN-SUFFIX,bootrealtime.uve.weibo.com,REJECT-200
+DOMAIN-SUFFIX,brandvideo.biz.weibo.com,REJECT-200
+DOMAIN-SUFFIX,ctobsnssdk.com,REJECT-DICT
+DOMAIN-SUFFIX,gdt.qq.com,REJECT-DICT
+DOMAIN-SUFFIX,gdtimg.cn,REJECT
+DOMAIN-SUFFIX,gdtimg.com,REJECT
+DOMAIN-SUFFIX,log.snssdk.com,REJECT-DICT
+DOMAIN-SUFFIX,mdt.qq.com,REJECT-DICT
+DOMAIN-SUFFIX,mssdk.volces.com,REJECT-DICT
+DOMAIN-SUFFIX,mssdk3-normal-hl.zijieapi.com,REJECT-DICT
+DOMAIN-SUFFIX,pangolin-dsp-toutiao.com,REJECT-DICT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao.com,REJECT-DICT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com,REJECT-DICT
+DOMAIN-SUFFIX,pangolin-sdk-toutiao1.com,REJECT-DICT
+DOMAIN-SUFFIX,pglstatp-toutiao.com,REJECT-DICT
+DOMAIN-SUFFIX,pgdt.gtimg.cn,REJECT
+DOMAIN-SUFFIX,sdk.e.qq.com,REJECT-DICT
+DOMAIN-SUFFIX,sdkquic.e.qq.com,REJECT-DICT
+DOMAIN-SUFFIX,tangram.e.qq.com,REJECT-DICT
+DOMAIN-SUFFIX,tianshu.gtimg.cn,REJECT
+DOMAIN-SUFFIX,ulogs.umeng.com,REJECT-DICT
+DOMAIN-SUFFIX,ulogs.umengcloud.com,REJECT-DICT
+
+[URL Rewrite]
+# 网易云音乐
+^https?:\/\/interface\.music\.163\.com\/eapi\/ad\/config\/get _ REJECT-DICT
+
+# 知乎
+^https?:\/\/api\.zhihu\.com\/commercial_api\/(real_time_)?launch_v2\? _ REJECT-DICT
+
+# Bilibili
+^https?:\/\/app\.bilibili\.com\/x\/v2\/splash\/(event\/list|brand\/list|show|list) _ REJECT-DICT
+
+# 高德地图
+^https?:\/\/m5\.amap\.com\/ws\/(feature\/preheat\/bootevent|shield\/dsp\/app\/startup\/init|valueadded\/alimama\/splash_screen) _ REJECT-DICT
+
+# 京东
+^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=(lite_advertising|homeAreaPop) _ REJECT-DICT
+^https?:\/\/m\.360buyimg\.com\/mobilecms\/s1125 _ REJECT-200
+^https?:\/\/(img\w|kjimg10)\.360buyimg\.com\/(pop|mcmktresadmin)\/jfs\/.*\.(jpg|png|heic|webp|avif) _ REJECT-200
+
+# 淘宝 / 天猫 / 闲鱼 / 飞猪 / 阿里系
+^https?:\/\/ossgw\.alicdn\.com\/creatives-assets\/(image|prod)\/.*\.(jpg|png|heic|webp) _ REJECT-200
+^https?:\/\/cloud\.video\.taobao\.com\/vod\/.*\.mp4 _ REJECT-200
+^https?:\/\/cloud\.video\.taobao\.com\/.*alimama.*\.mp4 _ REJECT-VIDEO
+^https?:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlecommerce\.splash _ REJECT-DICT
+^https?:\/\/acs\.m\.goofish\.com\/gw\/mtop\.idle\.idleadv\..* _ REJECT-DICT
+^https?:\/\/img\.alicdn\.com\/imgextra\/i\w\/.*-at.*\.(jpg|png|heic|webp) _ REJECT-200
+^https?:\/\/(gw|heic|img)\.alicdn\.com\/imgextra\/i\w\/.*(1080-|1125-|1350|-1602|-1950|-2208|-2339|-2436|1170-2532).*\.(jpg|png|heic|webp) _ REJECT-200
+
+# 58 同城
+^https?:\/\/app\.58\.com\/api\/home\/appadv\/splashscreenadv _ REJECT-DICT
+
+# 脉脉
+^https?:\/\/open\.taou\.com\/maimai\/adshow _ REJECT-DICT
+
+[MITM]
+enable = true
+hostname = interface.music.163.com,api.zhihu.com,app.bilibili.com,m5.amap.com,api.m.jd.com,m.360buyimg.com,*.360buyimg.com,ossgw.alicdn.com,cloud.video.taobao.com,acs.m.goofish.com,img.alicdn.com,gw.alicdn.com,heic.alicdn.com,app.58.com,open.taou.com
