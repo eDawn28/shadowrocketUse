@@ -4,22 +4,24 @@ GitHub 仓库：
 
 - https://github.com/eDawn28/shadowrocketUse
 
-This repository stores Shadowrocket rule configs and FLClash script overrides.
+本仓库存放 Shadowrocket 分流配置和 FLClash 脚本覆写。
 
-Shadowrocket configs:
+Shadowrocket 配置：
 
 - `ios-mesl-shadowrocket.conf`
 - `ios-oixcloud-shadowrocket.conf`
+- `ios-sntp-shadowrocket.conf`
 - `ios-app-splash-ad-shadowrocket.module`
 
-FLClash script overrides:
+FLClash 脚本覆写：
 
 - `flclash-mesl-script-overwrite.js`
 - `flclash-oixcloud-script-overwrite.js`
+- `flclash-sntp-script-overwrite.js`
 
-The configs do not embed airport subscription URLs. They reference server subscriptions already imported in Shadowrocket by name, then apply split-routing groups for AI, streaming, Telegram, Netflix, TikTok, Apple, Microsoft, domestic traffic, and final fallback.
+这些配置不会内置机场订阅 URL。它们会通过名称引用已经导入 Shadowrocket 的节点订阅，然后应用 AI、流媒体、Telegram、Netflix、TikTok、Apple、Microsoft、国内流量和最终兜底的分流分组。
 
-Domestic mini-app and media traffic is placed before proxy rules and forced to `DIRECT`, including WeChat/Tencent, Alipay, Douyin, Bilibili, iQIYI, Youku, Tencent Video, NetEase Music, and common related CDN domains.
+国内小程序和媒体流量会放在代理规则之前并强制走 `DIRECT`，包括微信 / 腾讯、支付宝、抖音、Bilibili、爱奇艺、优酷、腾讯视频、网易云音乐及其常见 CDN 域名。
 
 ## 广告拦截说明
 
@@ -42,35 +44,36 @@ iOS Shadowrocket 配置采用保守广告拦截策略：在局域网直连规则
 
 模块内已放置微信、支付宝、银联支付相关白名单，并且没有对微信、支付宝、小程序支付相关域名开启 MITM。不要自行添加 `qq.com`、`tencent.com`、`alipay.com`、`alicdn.com` 这类过宽的拦截规则，否则容易影响小程序、登录或支付。
 
-## Use In Shadowrocket
+## Shadowrocket 使用方式
 
-1. In Shadowrocket, import your airport server subscription first.
-2. Name the server subscription exactly `MESL` or `oixCloud`.
-3. Import the matching rule config file.
-4. Select the imported rule config under `Config`.
-5. Open `Proxy Group` and update/select nodes inside `MESL Nodes` or `oixCloud Nodes`.
+1. 先在 Shadowrocket 中导入机场节点订阅。
+2. 将节点订阅名称精确设置为 `MESL`、`oixCloud` 或 `SNTP`。
+3. 导入对应的分流配置文件。
+4. 在 `Config` 中选择导入的分流配置。
+5. 打开 `Proxy Group`，在 `MESL Nodes`、`oixCloud Nodes` 或 `SNTP Nodes` 中更新并选择节点。
 
-Suggested usage:
+建议用法：
 
-- Use `ios-mesl-shadowrocket.conf` when you want MESL nodes.
-- Use `ios-oixcloud-shadowrocket.conf` when you want oixCloud nodes.
+- 使用 MESL 节点时选择 `ios-mesl-shadowrocket.conf`。
+- 使用 oixCloud 节点时选择 `ios-oixcloud-shadowrocket.conf`。
+- 使用 SNTP 节点时选择 `ios-sntp-shadowrocket.conf`。
 
-If `MESL Nodes` or `oixCloud Nodes` shows `None`, the server subscription name does not match, the server subscription was imported as a local config instead of a server subscription, or the server subscription has not updated successfully.
+如果 `MESL Nodes`、`oixCloud Nodes` 或 `SNTP Nodes` 显示 `None`，通常是节点订阅名称不匹配、节点订阅被导入成了本地配置而不是服务器订阅，或节点订阅尚未成功更新。
 
-Do not merge these two configs inside Shadowrocket unless you specifically want to debug node/provider behavior.
+除非需要调试节点或 provider 行为，否则不要在 Shadowrocket 内合并这些配置。
 
 ## 分组选择保留
 
 Shadowrocket 的分组配置不再写入 `select=0`，避免每次更新远端 `.conf` 时强制恢复到第一个选项。只要分组名称和候选项保持稳定，小火箭通常会尽量沿用本地已有选择；如果机场节点被删除或订阅异常导致选项丢失，再手动重新选择节点或兜底策略即可。
 
-## Use In FLClash
+## FLClash 使用方式
 
-Use the matching `.js` file as the script overwrite for the corresponding airport subscription.
+将对应的 `.js` 文件作为相应机场订阅的脚本覆写。
 
-The FLClash scripts merge rule providers into the original profile, replace rules with the custom split-routing rules, and auto-create any missing proxy groups referenced by the rules. This avoids import failures like `proxy not found` when an airport profile changes or omits a group.
+FLClash 脚本会把 rule providers 合并进原始配置，用自定义分流规则替换原规则，并自动创建规则中引用但原配置缺失的代理分组。这样可以避免机场配置变化或漏掉分组时出现 `proxy not found` 之类的导入失败。
 
-## GitHub Private Repo Note
+## GitHub 私有仓库说明
 
-Shadowrocket usually cannot download raw files from a private GitHub repository without an authenticated URL or supported request headers.
+如果 GitHub 仓库是私有仓库，Shadowrocket 通常无法在没有认证 URL 或请求头支持的情况下直接下载 raw 文件。
 
-A private repository is good for backup, but it may not work as a direct Shadowrocket URL. If direct URL update fails, import the file manually or use a private file host that supports stable authenticated download links.
+私有仓库适合备份，但不一定适合作为 Shadowrocket 的直接订阅地址。如果直接 URL 更新失败，请手动导入文件，或改用支持稳定认证下载链接的私有文件托管服务。
