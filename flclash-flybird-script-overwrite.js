@@ -87,9 +87,9 @@ const DIRECT_FIRST_GROUPS = {
 
 const PREFERRED_GROUPS = [
   "Proxy",
-  "SNTP",
-  "SNTP Auto",
-  "SNTP Fallback",
+  "FlyBird",
+  "FlyBird Auto",
+  "FlyBird Fallback",
   "MESL",
   "MESL Auto",
   "MESL Fallback",
@@ -107,7 +107,7 @@ function provider(file, name) {
     behavior: "classical",
     format: "yaml",
     interval: 86400,
-    path: `./ruleset/sntp/${file}.yaml`,
+    path: `./ruleset/flybird/${file}.yaml`,
     url: `https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/${name}/${name}.yaml`,
   };
 }

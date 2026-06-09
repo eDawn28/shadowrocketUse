@@ -10,14 +10,14 @@ Shadowrocket 配置：
 
 - `ios-mesl-shadowrocket.conf`
 - `ios-oixcloud-shadowrocket.conf`
-- `ios-sntp-shadowrocket.conf`
+- `ios-flybird-shadowrocket.conf`
 - `ios-app-splash-ad-shadowrocket.module`
 
 FLClash 脚本覆写：
 
 - `flclash-mesl-script-overwrite.js`
 - `flclash-oixcloud-script-overwrite.js`
-- `flclash-sntp-script-overwrite.js`
+- `flclash-flybird-script-overwrite.js`
 
 这些配置不会内置机场订阅 URL。它们会通过名称引用已经导入 Shadowrocket 的节点订阅，然后应用 AI、流媒体、Telegram、Netflix、TikTok、Apple、Microsoft、国内流量和最终兜底的分流分组。
 
@@ -47,18 +47,18 @@ iOS Shadowrocket 配置采用保守广告拦截策略：在局域网直连规则
 ## Shadowrocket 使用方式
 
 1. 先在 Shadowrocket 中导入机场节点订阅。
-2. 将节点订阅名称精确设置为 `MESL`、`oixCloud` 或 `SNTP`。
+2. 将节点订阅名称精确设置为 `MESL`、`oixCloud` 或 `FlyBird`。
 3. 导入对应的分流配置文件。
 4. 在 `Config` 中选择导入的分流配置。
-5. 打开 `Proxy Group`，在 `MESL Nodes`、`oixCloud Nodes` 或 `SNTP Nodes` 中更新并选择节点。
+5. 打开 `Proxy Group`，在 `MESL Nodes`、`oixCloud Nodes` 或 `FlyBird Nodes` 中更新并选择节点。
 
 建议用法：
 
 - 使用 MESL 节点时选择 `ios-mesl-shadowrocket.conf`。
 - 使用 oixCloud 节点时选择 `ios-oixcloud-shadowrocket.conf`。
-- 使用 SNTP 节点时选择 `ios-sntp-shadowrocket.conf`。
+- 使用 FlyBird 节点时选择 `ios-flybird-shadowrocket.conf`。
 
-如果 `MESL Nodes`、`oixCloud Nodes` 或 `SNTP Nodes` 显示 `None`，通常是节点订阅名称不匹配、节点订阅被导入成了本地配置而不是服务器订阅，或节点订阅尚未成功更新。
+如果 `MESL Nodes`、`oixCloud Nodes` 或 `FlyBird Nodes` 显示 `None`，通常是节点订阅名称不匹配、节点订阅被导入成了本地配置而不是服务器订阅，或节点订阅尚未成功更新。
 
 除非需要调试节点或 provider 行为，否则不要在 Shadowrocket 内合并这些配置。
 
