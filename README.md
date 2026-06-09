@@ -13,6 +13,10 @@ Shadowrocket 配置：
 - `ios-flybird-shadowrocket.conf`
 - `ios-app-splash-ad-shadowrocket.module`
 - `ios-tiktok-tw-shadowrocket.module`
+- `ios-tiktok-us-shadowrocket.module`
+- `ios-tiktok-jp-shadowrocket.module`
+- `ios-tiktok-kr-shadowrocket.module`
+- `ios-tiktok-sg-shadowrocket.module`
 
 FLClash 脚本覆写：
 
@@ -45,14 +49,17 @@ iOS Shadowrocket 配置采用保守广告拦截策略：在局域网直连规则
 
 模块内已放置微信、支付宝、银联支付相关白名单，并且没有对微信、支付宝、小程序支付相关域名开启 MITM。不要自行添加 `qq.com`、`tencent.com`、`alipay.com`、`alicdn.com` 这类过宽的拦截规则，否则容易影响小程序、登录或支付。
 
-## TikTok 台湾区测试模块
+## TikTok 地区测试模块
 
-`ios-tiktok-tw-shadowrocket.module` 是可选测试模块，用来把 TikTok 相关域名导向主配置里的 `TikTok` 分组，并加入台湾区 `URL Rewrite` 和 TikTok 专用 `MITM`。
+`ios-tiktok-*-shadowrocket.module` 是可选测试模块，用来把 TikTok 相关域名导向主配置里的 `TikTok` 分组，并加入对应地区的 `URL Rewrite` 和 TikTok 专用 `MITM`。
 
-这个模块不是主配置的一部分，需要在 Shadowrocket 的模块页面单独添加并启用：
+这些模块不是主配置的一部分，需要在 Shadowrocket 的模块页面单独添加并启用。每次只启用一个 TikTok 地区模块，并在主配置的 `TikTok` 分组里选择同地区节点：
 
-- Raw：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-tw-shadowrocket.module`
-- jsDelivr：`https://cdn.jsdelivr.net/gh/eDawn28/shadowrocketUse@main/ios-tiktok-tw-shadowrocket.module`
+- TW：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-tw-shadowrocket.module`
+- US：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-us-shadowrocket.module`
+- JP：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-jp-shadowrocket.module`
+- KR：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-kr-shadowrocket.module`
+- SG：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-sg-shadowrocket.module`
 
 注意：启用前需要安装并信任 Shadowrocket 证书。测试 TikTok 时，如果 GitHub、YouTube 或其他正常分流异常，优先关闭这个模块，主配置应保持稳定可用。
 
