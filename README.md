@@ -12,6 +12,7 @@ Shadowrocket 配置：
 - `ios-oixcloud-shadowrocket.conf`
 - `ios-flybird-shadowrocket.conf`
 - `ios-app-splash-ad-shadowrocket.module`
+- `ios-tiktok-tw-shadowrocket.module`
 
 FLClash 脚本覆写：
 
@@ -43,6 +44,17 @@ iOS Shadowrocket 配置采用保守广告拦截策略：在局域网直连规则
 注意：URL Rewrite 处理 HTTPS 请求时通常需要开启 HTTPS 解密，并在 iOS 中安装、信任 Shadowrocket 证书。部分 App 使用证书固定，开启解密后可能失效、报错或无法联网；如果出现异常，优先关闭这个模块。
 
 模块内已放置微信、支付宝、银联支付相关白名单，并且没有对微信、支付宝、小程序支付相关域名开启 MITM。不要自行添加 `qq.com`、`tencent.com`、`alipay.com`、`alicdn.com` 这类过宽的拦截规则，否则容易影响小程序、登录或支付。
+
+## TikTok 台湾区测试模块
+
+`ios-tiktok-tw-shadowrocket.module` 是可选测试模块，用来把 TikTok 相关域名导向主配置里的 `TikTok` 分组，并加入台湾区 `URL Rewrite` 和 TikTok 专用 `MITM`。
+
+这个模块不是主配置的一部分，需要在 Shadowrocket 的模块页面单独添加并启用：
+
+- Raw：`https://raw.githubusercontent.com/eDawn28/shadowrocketUse/main/ios-tiktok-tw-shadowrocket.module`
+- jsDelivr：`https://cdn.jsdelivr.net/gh/eDawn28/shadowrocketUse@main/ios-tiktok-tw-shadowrocket.module`
+
+注意：启用前需要安装并信任 Shadowrocket 证书。测试 TikTok 时，如果 GitHub、YouTube 或其他正常分流异常，优先关闭这个模块，主配置应保持稳定可用。
 
 ## Shadowrocket 使用方式
 
