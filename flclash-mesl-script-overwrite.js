@@ -76,6 +76,26 @@ const RULES = [
   "MATCH,Final",
 ];
 
+const MICROSOFT_RULE_INSERT_INDEX = 5;
+
+const MICROSOFT_FALLBACK_DOMAINS = [
+  "microsoft.com",
+  "microsoft.net",
+  "windows.com",
+  "windows.net",
+  "windowsupdate.com",
+  "s-microsoft.com",
+  "msftconnecttest.com",
+  "msftncsi.com",
+  "live.com",
+  "live.net",
+  "xboxlive.com",
+  "xboxservices.com",
+  "a-msedge.net",
+  "msedge.net",
+  "azureedge.net",
+];
+
 const GROUP_PREFIX = "CC-";
 
 const BUILT_IN_POLICIES = {
@@ -88,6 +108,7 @@ const BUILT_IN_POLICIES = {
 const DIRECT_FIRST_GROUPS = {
   Domestic: true,
   "CN Mainland TV": true,
+  Microsoft: true,
 };
 
 const PREFERRED_GROUPS = [
@@ -190,7 +211,7 @@ function collectGroupNames(proxyGroups) {
 function buildGroupCandidates(config, groupNames, target) {
   const candidates = [];
 
-  if (DIRECT_FIRST_GROUPS[target] || DIRECT_FIRST_GROUPS[stripGroupPrefix(target)]) {
+  if (isDirectFirstGroup(target)) {
     candidates.push("DIRECT");
   }
 
@@ -229,7 +250,35 @@ function uniqueCandidates(candidates, target) {
 }
 
 function buildRules() {
-  return RULES.map(prefixRuleTarget);
+  const rules = [
+    ...RULES.slice(0, MICROSOFT_RULE_INSERT_INDEX),
+    ...buildMicrosoftFallbackRules(),
+    ...RULES.slice(MICROSOFT_RULE_INSERT_INDEX),
+  ];
+
+  return uniqueRules(rules).map(prefixRuleTarget);
+}
+
+function buildMicrosoftFallbackRules() {
+  const microsoftRule = RULES.find((rule) => rule.startsWith("RULE-SET,Microsoft,"));
+  const target = microsoftRule ? parseRuleTarget(microsoftRule) : "Microsoft";
+  return MICROSOFT_FALLBACK_DOMAINS.map((domain) => `DOMAIN-SUFFIX,${domain},${target}`);
+}
+
+function uniqueRules(rules) {
+  const result = [];
+  const seen = {};
+
+  for (const rule of rules) {
+    if (seen[rule]) {
+      continue;
+    }
+
+    result.push(rule);
+    seen[rule] = true;
+  }
+
+  return result;
 }
 
 function prefixRuleTarget(rule) {
@@ -263,6 +312,11 @@ function findRuleTargetIndex(parts) {
 
 function stripGroupPrefix(name) {
   return name.startsWith(GROUP_PREFIX) ? name.slice(GROUP_PREFIX.length) : name;
+}
+
+function isDirectFirstGroup(target) {
+  const group = stripGroupPrefix(target);
+  return DIRECT_FIRST_GROUPS[target] || DIRECT_FIRST_GROUPS[group] || group.indexOf("Microsoft") >= 0;
 }
 
 function main(config) {
