@@ -76,6 +76,8 @@ const RULES = [
   "MATCH,Final",
 ];
 
+const GROUP_PREFIX = "CC-";
+
 const BUILT_IN_POLICIES = {
   DIRECT: true,
   REJECT: true,
@@ -122,13 +124,13 @@ function mergeRuleProviders(config) {
   }
 }
 
-function ensureRuleTargetGroups(config) {
+function ensureRuleTargetGroups(config, rules) {
   if (!Array.isArray(config["proxy-groups"])) {
     config["proxy-groups"] = [];
   }
 
   const groupNames = collectGroupNames(config["proxy-groups"]);
-  const targets = collectRuleTargets();
+  const targets = collectRuleTargets(rules);
 
   for (const target of targets) {
     if (BUILT_IN_POLICIES[target] || groupNames[target]) {
@@ -144,11 +146,11 @@ function ensureRuleTargetGroups(config) {
   }
 }
 
-function collectRuleTargets() {
+function collectRuleTargets(rules) {
   const targets = [];
   const seen = {};
 
-  for (const rule of RULES) {
+  for (const rule of rules) {
     const target = parseRuleTarget(rule);
     if (target && !seen[target]) {
       targets.push(target);
@@ -188,7 +190,7 @@ function collectGroupNames(proxyGroups) {
 function buildGroupCandidates(config, groupNames, target) {
   const candidates = [];
 
-  if (DIRECT_FIRST_GROUPS[target]) {
+  if (DIRECT_FIRST_GROUPS[target] || DIRECT_FIRST_GROUPS[stripGroupPrefix(target)]) {
     candidates.push("DIRECT");
   }
 
@@ -226,9 +228,48 @@ function uniqueCandidates(candidates, target) {
   return result.length > 0 ? result : ["DIRECT"];
 }
 
+function buildRules() {
+  return RULES.map(prefixRuleTarget);
+}
+
+function prefixRuleTarget(rule) {
+  const parts = rule.split(",");
+  const targetIndex = findRuleTargetIndex(parts);
+
+  if (targetIndex < 0) {
+    return rule;
+  }
+
+  const target = parts[targetIndex];
+  if (BUILT_IN_POLICIES[target] || target.startsWith(GROUP_PREFIX)) {
+    return rule;
+  }
+
+  parts[targetIndex] = `${GROUP_PREFIX}${target}`;
+  return parts.join(",");
+}
+
+function findRuleTargetIndex(parts) {
+  if (parts.length < 2) {
+    return -1;
+  }
+
+  if (parts[0] === "MATCH" || parts[0] === "FINAL") {
+    return 1;
+  }
+
+  return parts[parts.length - 1] === "no-resolve" ? parts.length - 2 : parts.length - 1;
+}
+
+function stripGroupPrefix(name) {
+  return name.startsWith(GROUP_PREFIX) ? name.slice(GROUP_PREFIX.length) : name;
+}
+
 function main(config) {
+  const rules = buildRules();
+
   mergeRuleProviders(config);
-  ensureRuleTargetGroups(config);
-  config.rules = RULES;
+  ensureRuleTargetGroups(config, rules);
+  config.rules = rules;
   return config;
 }
