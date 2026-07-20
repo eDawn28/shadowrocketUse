@@ -31,6 +31,7 @@ const RULE_PROVIDERS = {
 };
 
 const RULES = [
+  "DOMAIN,in.mesl.cloud,DIRECT",
   "DOMAIN-SUFFIX,local,DIRECT",
   "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve",
   "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve",
@@ -73,7 +74,7 @@ const RULES = [
   "MATCH,Others",
 ];
 
-const MICROSOFT_RULE_INSERT_INDEX = 5;
+const MICROSOFT_RULE_INSERT_INDEX = 6;
 
 const MICROSOFT_FALLBACK_DOMAINS = [
   "microsoft.com",
